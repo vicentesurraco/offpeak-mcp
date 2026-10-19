@@ -1,0 +1,10 @@
+{
+  "name": "offpeak",
+  "version": "1.2.0",
+  "description": "Find jobs by driving commute, seniority, pay, and your saved filters. Published by Vicente Surraco.",
+  "mcpServers": {
+    "offpeak": {
+      "httpUrl": "https://offpeak.fyi/mcp"
+    }
+  }
+}

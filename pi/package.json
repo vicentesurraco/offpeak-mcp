@@ -1,0 +1,28 @@
+{
+  "name": "@vicentesurraco/pi-offpeak",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Offpeak job search by driving commute, seniority, and pay for Pi. Published by Vicente Surraco.",
+  "author": {
+    "name": "Vicente Surraco",
+    "email": "vicentesurraco@gmail.com"
+  },
+  "homepage": "https://offpeak.fyi",
+  "keywords": [
+    "pi-package",
+    "mcp",
+    "offpeak",
+    "jobs",
+    "commute"
+  ],
+  "files": [
+    "extensions/offpeak.js",
+    "README.md"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions/offpeak.js"
+    ]
+  }
+}

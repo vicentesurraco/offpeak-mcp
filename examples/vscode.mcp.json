@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "offpeak": {
+      "type": "http",
+      "url": "https://offpeak.fyi/mcp"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "offpeak",
+  "owner": {
+    "name": "Vicente Surraco",
+    "email": "vicentesurraco@gmail.com"
+  },
+  "metadata": {
+    "description": "Offpeak's Claude Code plugin: search US jobs by driving commute."
+  },
+  "plugins": [
+    {
+      "name": "offpeak",
+      "source": "./",
+      "description": "Find jobs by driving commute, seniority, pay, and your saved filters."
+    }
+  ]
+}

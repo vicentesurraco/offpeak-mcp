@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "offpeak": {
+      "serverUrl": "https://offpeak.fyi/mcp"
+    }
+  }
+}

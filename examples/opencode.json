@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "offpeak": {
+      "type": "remote",
+      "url": "https://offpeak.fyi/mcp",
+      "enabled": true,
+      "timeout": 120000
+    }
+  }
+}

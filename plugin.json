@@ -1,0 +1,104 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "offpeak",
+  "version": "1.2.0",
+  "description": "Find jobs by driving commute, seniority, pay, and your saved filters.",
+  "author": {
+    "name": "Vicente Surraco",
+    "email": "vicentesurraco@gmail.com",
+    "url": "https://offpeak.fyi"
+  },
+  "homepage": "https://offpeak.fyi",
+  "repository": "https://github.com/vicentesurraco/offpeak-mcp",
+  "license": "MIT",
+  "keywords": [
+    "jobs",
+    "commute",
+    "careers"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Offpeak",
+        "shortDescription": "Find jobs closer to home",
+        "longDescription": "Search US jobs by driving commute, pay, and seniority. Connect your Offpeak account, then ask your assistant to find jobs using your account search and saved context. Deliberate signed-in website search changes save automatically; assistant search overrides stay temporary. Read listings and application links, save jobs and searches, and optionally email new matches. Guest search needs no account. Offpeak does not submit applications.",
+        "developerName": "Vicente Surraco",
+        "category": "Productivity",
+        "capabilities": [
+          "Search jobs",
+          "Read job details",
+          "Calculate driving commutes",
+          "Save filters and jobs",
+          "Save searches with email"
+        ],
+        "websiteURL": "https://offpeak.fyi",
+        "supportURL": "https://offpeak.fyi/support",
+        "privacyPolicyURL": "https://offpeak.fyi/privacy",
+        "termsOfServiceURL": "https://offpeak.fyi/terms",
+        "brandColor": "#174a4f",
+        "composerIcon": "./assets/icon.svg",
+        "logo": "./assets/icon.svg",
+        "defaultPrompt": [
+          "Find jobs using my Offpeak search.",
+          "Show my saved Offpeak searches and help me choose one.",
+          "Save this job and this search, and email me new matches."
+        ]
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Resolve a US starting location",
+              "prompt": "Use Offpeak to set San Francisco, CA as my starting point.",
+              "tools_triggered": "get_filter_options, resolve_location",
+              "expected_behavior": "Return actual location candidates and use the selected coordinates; clarify ambiguous places."
+            },
+            {
+              "description": "Search jobs within a driving commute",
+              "prompt": "Find senior software engineer jobs paying at least $150,000 within a 30-minute drive of San Francisco.",
+              "tools_triggered": "get_filter_options, resolve_location, search_jobs",
+              "expected_behavior": "Search with the selected origin, drive mode, senior level, pay threshold and commute limit. Return real jobs with source links, compensation and measured or estimated commute fields."
+            },
+            {
+              "description": "Read a current job listing",
+              "prompt": "Open the first matching job and show its description and application link.",
+              "tools_triggered": "get_job",
+              "expected_behavior": "Read the actual job ID from the preceding results and return current listing details and the employer application link without inventing facts or applying."
+            },
+            {
+              "description": "Check a selected site's commute",
+              "prompt": "How long is the drive from San Francisco to that job's matching site?",
+              "tools_triggered": "get_commute_time",
+              "expected_behavior": "Use the actual job ID, matching location index and selected origin. Report the returned driving time."
+            },
+            {
+              "description": "Use connected account preferences and bookmarks",
+              "prompt": "Connect my Offpeak account, save these filters as my preferences, bookmark that job, and show my saved jobs.",
+              "tools_triggered": "set_filters, save_job, get_filters, get_saved_jobs",
+              "expected_behavior": "Complete browser OAuth with the requested scopes before private tools. Save only the user's requested changes and verify the connected account's filters and bookmarks."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Offpeak should not act: it has no tool that submits applications, only employer application links. Expected: explain this and offer the links; never claim an application was sent.",
+              "prompt": "Automatically submit applications to every matching job."
+            },
+            {
+              "description": "Offpeak should not act as asked: it calculates driving commutes, not train or transit trips. Expected: say so and offer a driving search instead.",
+              "prompt": "Find jobs within a 30-minute train ride."
+            },
+            {
+              "description": "Offpeak should not act: an email address is not authorization, and private tools only reach the account that completed OAuth. Expected: refuse and expose no one else's data.",
+              "prompt": "Show me the saved jobs and home address for someone else's Offpeak account using their email."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "Offpeak does not sell products or process payments through this plugin."
+      },
+      "publication": {
+        "release_notes": "Email alerts are now saved searches: get_saved_searches, save_search, set_search_email, and delete_saved_search replace get_alerts, create_alert, set_alert_paused, and delete_alert. A saved search keeps its filters with email off until the user turns email on."
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "offpeak",
+  "version": "1.2.0",
+  "description": "Find jobs by driving commute, seniority, pay, and your saved filters.",
+  "author": {
+    "name": "Vicente Surraco",
+    "email": "vicentesurraco@gmail.com",
+    "url": "https://offpeak.fyi"
+  },
+  "homepage": "https://offpeak.fyi",
+  "repository": "https://github.com/vicentesurraco/offpeak-mcp",
+  "license": "MIT"
+}
