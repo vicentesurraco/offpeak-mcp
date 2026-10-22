@@ -3,7 +3,7 @@
   "mcpServers": {
     "offpeak": {
       "type": "streamable-http",
-      "url": "https://offpeak.fyi/mcp"
+      "url": "https://offpeak.fyi/mcp?auth=required"
     }
   }
 }
