@@ -9,5 +9,9 @@
   },
   "homepage": "https://offpeak.fyi",
   "repository": "https://github.com/vicentesurraco/offpeak-mcp",
-  "license": "MIT"
+  "license": "MIT",
+  "documentationUrl": "https://offpeak.fyi/mcp-guide",
+  "privacyPolicyUrl": "https://offpeak.fyi/privacy",
+  "supportUrl": "https://offpeak.fyi/support",
+  "termsOfServiceUrl": "https://offpeak.fyi/terms"
 }
