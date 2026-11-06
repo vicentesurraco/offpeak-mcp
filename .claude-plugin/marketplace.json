@@ -2,16 +2,16 @@
   "name": "offpeak",
   "owner": {
     "name": "Vicente Surraco",
-    "email": "vicentesurraco@gmail.com"
+    "email": "vicente@offpeak.fyi"
   },
   "metadata": {
-    "description": "Offpeak's Claude Code plugin: search US jobs by driving commute."
+    "description": "offpeak.fyi is a free public US job board for browsing jobs by driving commute on a map and list. MCP provides another way to access it. Every result links to a public job page with Apply on the employer\u2019s site."
   },
   "plugins": [
     {
       "name": "offpeak",
       "source": "./",
-      "description": "Find jobs by driving commute, seniority, pay, and your saved filters."
+      "description": "offpeak.fyi is a free public US job board for browsing jobs by driving commute on a map and list. MCP provides another way to access it. Every result links to a public job page with Apply on the employer\u2019s site."
     }
   ]
 }

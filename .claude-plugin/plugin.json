@@ -1,17 +1,17 @@
 {
   "name": "offpeak",
   "version": "1.2.0",
-  "description": "Find jobs by driving commute, seniority, pay, and your saved filters.",
+  "description": "offpeak.fyi is a free public US job board for browsing jobs by driving commute on a map and list. MCP provides another way to access it. Every result links to a public job page with Apply on the employer\u2019s site.",
   "author": {
     "name": "Vicente Surraco",
-    "email": "vicentesurraco@gmail.com",
+    "email": "vicente@offpeak.fyi",
     "url": "https://offpeak.fyi"
   },
   "homepage": "https://offpeak.fyi",
-  "repository": "https://github.com/vicentesurraco/offpeak-mcp",
-  "license": "MIT",
   "documentationUrl": "https://offpeak.fyi/mcp-guide",
   "privacyPolicyUrl": "https://offpeak.fyi/privacy",
   "supportUrl": "https://offpeak.fyi/support",
-  "termsOfServiceUrl": "https://offpeak.fyi/terms"
+  "termsOfServiceUrl": "https://offpeak.fyi/terms",
+  "repository": "https://github.com/vicentesurraco/offpeak-mcp",
+  "license": "MIT"
 }

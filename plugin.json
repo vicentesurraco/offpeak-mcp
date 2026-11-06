@@ -2,10 +2,10 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "offpeak",
   "version": "1.2.0",
-  "description": "Find jobs by driving commute, seniority, pay, and your saved filters.",
+  "description": "offpeak.fyi is a free public US job board for browsing jobs by driving commute on a map and list. MCP provides another way to access it. Every result links to a public job page with Apply on the employer\u2019s site.",
   "author": {
     "name": "Vicente Surraco",
-    "email": "vicentesurraco@gmail.com",
+    "email": "vicente@offpeak.fyi",
     "url": "https://offpeak.fyi"
   },
   "homepage": "https://offpeak.fyi",
@@ -21,8 +21,8 @@
       "interface": {
         "displayName": "Offpeak",
         "shortDescription": "Find jobs closer to home",
-        "longDescription": "Search US jobs by driving commute, pay, and seniority. Connect your Offpeak account, then ask your assistant to find jobs using your account search and saved context. Deliberate signed-in website search changes save automatically; assistant search overrides stay temporary. Read listings and application links, save jobs and searches, and optionally email new matches. Guest search needs no account. Offpeak does not submit applications.",
-        "developerName": "Vicente Surraco",
+        "longDescription": "Search US jobs by driving commute, pay, and seniority. Read job details and employer application links, and compare driving times from a starting point you choose. Search without an account, or connect your Offpeak account to save preferences, bookmark jobs, and save searches with optional email updates. Offpeak supports driving commutes and does not submit applications.",
+        "developerName": "VICENTE LUIS SURRACO",
         "category": "Productivity",
         "capabilities": [
           "Search jobs",
@@ -36,8 +36,8 @@
         "privacyPolicyURL": "https://offpeak.fyi/privacy",
         "termsOfServiceURL": "https://offpeak.fyi/terms",
         "brandColor": "#174a4f",
-        "composerIcon": "./assets/icon.svg",
-        "logo": "./assets/icon.svg",
+        "composerIcon": "./assets/icon-400.png",
+        "logo": "./assets/icon-400.png",
         "defaultPrompt": [
           "Find jobs using my Offpeak search.",
           "Show my saved Offpeak searches and help me choose one.",
@@ -48,56 +48,58 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Resolve a US starting location",
-              "prompt": "Use Offpeak to set San Francisco, CA as my starting point.",
+              "description": "Case 1 of 5. Start a fresh ChatGPT conversation with Offpeak available. Run all five positive cases in order in this conversation. Choose a public starting point without saving preferences.",
+              "prompt": "Use Offpeak to look up San Francisco, CA as a temporary starting point. Show the candidate and supported search filters. Do not save or change my account preferences.",
               "tools_triggered": "get_filter_options, resolve_location",
-              "expected_behavior": "Return actual location candidates and use the selected coordinates; clarify ambiguous places."
+              "expected_behavior": "Return real location candidates and supported filters. Use the unambiguous city point for the following cases; clarify ambiguity. Do not call set_filters. Address and coordinate inputs are retained for commute search; a location-policy exception is requested and remains unapproved."
             },
             {
-              "description": "Search jobs within a driving commute",
-              "prompt": "Find senior software engineer jobs paying at least $150,000 within a 30-minute drive of San Francisco.",
-              "tools_triggered": "get_filter_options, resolve_location, search_jobs",
-              "expected_behavior": "Search with the selected origin, drive mode, senior level, pay threshold and commute limit. Return real jobs with source links, compensation and measured or estimated commute fields."
+              "description": "Case 2 of 5. Continue after case 1 using its selected public city point. Search by driving time, pay and seniority, then paginate.",
+              "prompt": "Using the San Francisco city point we just selected, find senior software engineer jobs paying at least $150,000 within a 30-minute drive. Exclude jobs without posted pay. Show five matches, then the next five.",
+              "tools_triggered": "search_jobs",
+              "expected_behavior": "Use the selected coordinates, mode=drive, level=senior, min_pay=150000, include_no_pay=false, max_minutes=30 and limit=5. Pay eligibility uses the posted annualized range midpoint, as documented by Offpeak; report available pay ranges without implying the minimum of each range is $150,000. Return real jobs and application links. Continue with cursor=next_cursor and limit=5, omitting filters, with no duplicate IDs between pages. If fewer matches exist, state the actual result count. Do not save preferences."
             },
             {
-              "description": "Read a current job listing",
-              "prompt": "Open the first matching job and show its description and application link.",
-              "tools_triggered": "get_job",
-              "expected_behavior": "Read the actual job ID from the preceding results and return current listing details and the employer application link without inventing facts or applying."
+              "description": "Case 3 of 5. Continue after case 2 using its real job IDs and matching location_index values. Read individual and batch details and calculate the matching site commute.",
+              "prompt": "Open the first matching job from the first page and show its description and application link. Read the next two jobs together for comparison. Calculate the drive from our selected starting point to the first job\u2019s matching site.",
+              "tools_triggered": "get_job, get_jobs, get_commute_time",
+              "expected_behavior": "Use real IDs and location_index from case 2. Read the first listing and batch the next two available IDs. Report the returned commute and application links; never invent missing pay, stale listings, or applications. If there are too few matches, state that limitation."
             },
             {
-              "description": "Check a selected site's commute",
-              "prompt": "How long is the drive from San Francisco to that job's matching site?",
-              "tools_triggered": "get_commute_time",
-              "expected_behavior": "Use the actual job ID, matching location index and selected origin. Report the returned driving time."
+              "description": "Case 4 of 5. Continue after cases 1-3 with the dedicated reviewer account supplied in the private access fields. Record initial filters and bookmark IDs. Verify preference and bookmark changes.",
+              "prompt": "Connect my Offpeak account and read my current filters and bookmarks. Save the search criteria we used as my preferences, bookmark the selected first job, and show the updated filters and saved jobs.",
+              "tools_triggered": "get_filters, get_saved_jobs, set_filters, save_job",
+              "expected_behavior": "Complete OAuth if not already connected to the dedicated reviewer account, with the necessary read/write scopes. Read the initial filters and bookmarks, save only the requested criteria, and call save_job with saved=true for the selected job. Read back the results. If that job was already saved, verify it remains saved without claiming a new bookmark was added. Do not access another account. After testing, the operator restores initial preferences and removes only newly added bookmarks."
             },
             {
-              "description": "Use connected account preferences and bookmarks",
-              "prompt": "Connect my Offpeak account, save these filters as my preferences, bookmark that job, and show my saved jobs.",
-              "tools_triggered": "set_filters, save_job, get_filters, get_saved_jobs",
-              "expected_behavior": "Complete browser OAuth with the requested scopes before private tools. Save only the user's requested changes and verify the connected account's filters and bookmarks."
+              "description": "Case 5 of 5. Continue after case 4 with the connected reviewer account, which has an existing saved search with email off. Edit its commute criterion in place and enable email.",
+              "prompt": "Show my saved searches. For the saved search with email off, change its commute limit to 25 minutes and turn email on. Confirm the updated search.",
+              "tools_triggered": "get_saved_searches, update_search, set_search_email",
+              "expected_behavior": "Identify the existing saved search with email off; if more than one matches, ask which to edit. Use update_search with its real saved_search_id and filters.max_minutes=25, preserving its ID, name and other criteria. Only after the edit succeeds, call set_search_email with the same ID and enabled=true. Read back and confirm the same search has the new limit and email on. Preserve all other searches and account preferences. Delivery is suppressed for the dedicated reviewer account; this verifies controls, not inbox delivery."
             }
           ],
           "negative": [
             {
-              "description": "Offpeak should not act: it has no tool that submits applications, only employer application links. Expected: explain this and offer the links; never claim an application was sent.",
-              "prompt": "Automatically submit applications to every matching job."
+              "description": "In a fresh ChatGPT conversation with Offpeak available: Offpeak should not act as asked because it calculates driving commutes, not walking times. Explain the limitation and offer a driving commute estimate instead. Never present a driving estimate as a walking time.",
+              "prompt": "How long would it take to walk to this job?"
             },
             {
-              "description": "Offpeak should not act as asked: it calculates driving commutes, not train or transit trips. Expected: say so and offer a driving search instead.",
+              "description": "In a fresh ChatGPT conversation with Offpeak available: Offpeak should not act as asked: it calculates driving commutes, not train or transit trips. Expected: say so and offer a driving search instead.",
               "prompt": "Find jobs within a 30-minute train ride."
             },
             {
-              "description": "Offpeak should not act: an email address is not authorization, and private tools only reach the account that completed OAuth. Expected: refuse and expose no one else's data.",
+              "description": "In a fresh ChatGPT conversation with Offpeak available: Offpeak should not act: an email address is not authorization, and private tools only reach the account that completed OAuth. Expected: refuse and expose no one else's data.",
               "prompt": "Show me the saved jobs and home address for someone else's Offpeak account using their email."
             }
           ]
         },
         "commerce": false,
-        "commerce_description": "Offpeak does not sell products or process payments through this plugin."
+        "commerce_description": "Offpeak does not sell products or process payments through this plugin.",
+        "demo_recording_url": "https://drive.google.com/file/d/1SsI5SQooJpPCcm8ymzUgnr3S5TgWpxNJ/view?usp=drivesdk"
       },
       "publication": {
-        "release_notes": "Email alerts are now saved searches: get_saved_searches, save_search, set_search_email, and delete_saved_search replace get_alerts, create_alert, set_alert_paused, and delete_alert. A saved search keeps its filters with email off until the user turns email on."
+        "release_notes": "Version 1.2.0 adds saved searches with optional email controls. It also corrects tool annotations and limits responses to fields needed for the requested job-search task. Review note: Offpeak retains address and coordinate inputs for driving-commute search; a location-policy exception is requested and has not been approved.",
+        "countries": []
       }
     }
   }
